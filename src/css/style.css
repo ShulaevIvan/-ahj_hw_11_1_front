@@ -1,0 +1,45 @@
+body {
+    box-sizing: border-box;
+    overflow-x: hidden;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 1170px;
+    min-width: 1024px;
+    align-items: center;
+}
+.messages-wrap {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+}
+.messages-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100;
+    border: 1px solid;
+    min-height: 50px;
+    align-items: center;
+}
+.messages-item-email, .messages-item-text {
+    display: flex;
+    justify-content: center;
+    width: 33%;
+}
+.messages-item-date {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 3%;
+    width: 30%;
+}
