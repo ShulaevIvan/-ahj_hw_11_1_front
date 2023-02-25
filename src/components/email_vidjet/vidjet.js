@@ -1,39 +1,62 @@
-import { Observable, fromEvent, from, interval } from 'rxjs';
-import { map, pluck }  from 'rxjs/operators';
+import { interval } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
+import Popup from '../popup/popup';
 
 export default class EmailVidjet {
     constructor(appTag) {
         this.appContainer = document.querySelector('.app-container');
         this.messagesWrap = this.appContainer.querySelector('.messages-wrap');
+        this.incomingTitle = this.appContainer.querySelector('.incoming-title');
+        this.errBlock = this.appContainer.querySelector('.err-block');
+        this.incomingSum = 0;
+        this.popup = new Popup('.popup-wrap');
         this.timeInteral = interval(5000);
         this.dataUrl = 'http://localhost:7070/messages/unread';
+
         this.timeInteral.subscribe({
             next: () => {
-                this.dataStream$ = ajax.getJSON(this.dataUrl);
+                this.dataStream$ = ajax.getJSON(this.dataUrl)
                 this.dataStream$.subscribe((data) => {
                     if (data.status === 'ok') {
+                        this.errBlock.style.display = 'none';
+                        this.incomingSum += data.messages.length;
+                        this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
                         data.messages.forEach((message) => {
                            const time = new Date(message.received).toLocaleTimeString('ru')
                            const date = new Date(message.received).toLocaleDateString('ru');
                            const messageDate = `${time} ${date}`;
-                           
-                           this.createMessage(message.subject, message.from, messageDate);
+                           const messageFull = message.body;
+                           this.createMessage(message.subject, message.from, messageDate, messageFull);
                         })
                     }
+                }, (err) => {
+                    this.errBlock.style.display = 'block';
+                    this.errBlock.textContent = 'reconnecting ...';
+                    this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
                 });
-            },
-            error: (err) => {
-                console.log(err)
             }
         });
+    }
 
-
+    messageOpenEvent = async (e) => {
+        const position = {
+            left: e.pageX,
+            top: e.pageY,
+        }
+        const email = e.target.querySelector('.messages-item-email');
+        const messageObj = {
+            email: email.textContent,
+            text: this.fullText,
+            date: this.messageDate,
+        }
+        this.popup.hide();
+        this.popup.show(messageObj, position);
 
     }
 
-    createMessage(subject, from, date) {
+    createMessage(subject, from, date, messageFull) {
         this.subject = subject;
+        this.fullText = messageFull;
         this.from = from;
         this.messageDate = date;
         if (this.subject.length >= 15) {
@@ -50,10 +73,11 @@ export default class EmailVidjet {
         messageText.classList.add('messages-item-text');
         messageDate.classList.add('messages-item-date');
 
+        messageItem.addEventListener('click', this.messageOpenEvent);
+
         messageEmail.textContent = this.from;
         messageText.textContent =  this.subject
         messageDate.textContent = this.messageDate;
-
         messageItem.appendChild(messageEmail);
         messageItem.appendChild(messageText);
         messageItem.appendChild(messageDate);

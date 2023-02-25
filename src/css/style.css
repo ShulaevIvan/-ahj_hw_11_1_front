@@ -31,15 +31,29 @@ body {
     border: 1px solid;
     min-height: 50px;
     align-items: center;
+    cursor: pointer;
 }
 .messages-item-email, .messages-item-text {
     display: flex;
     justify-content: center;
     width: 33%;
+    pointer-events: none;
 }
 .messages-item-date {
     display: flex;
     justify-content: flex-end;
     margin-right: 3%;
     width: 30%;
+    pointer-events: none;
+}
+.messages-item-text {
+    pointer-events: none;
+}
+.incoming-title {
+    margin:10px 0px;
+}
+.err-block {
+    padding: 0;
+    margin-bottom: 20px;
+    font-style: italic;
 }
