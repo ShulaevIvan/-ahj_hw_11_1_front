@@ -15,11 +15,13 @@ export default class EmailVidjet {
 
         this.timeInteral.subscribe({
             next: () => {
-                this.dataStream$ = ajax.getJSON(this.dataUrl)
+                this.dataStream$ = ajax.getJSON(this.dataUrl);
+                const messages = document.querySelectorAll('.messages-item');
+                messages.forEach((item) => item.remove());
                 this.dataStream$.subscribe((data) => {
                     if (data.status === 'ok') {
                         this.errBlock.style.display = 'none';
-                        this.incomingSum += data.messages.length;
+                        this.incomingSum = data.messages.length;
                         this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
                         data.messages.forEach((message) => {
                            const time = new Date(message.received).toLocaleTimeString('ru')
@@ -82,7 +84,11 @@ export default class EmailVidjet {
         messageItem.appendChild(messageText);
         messageItem.appendChild(messageDate);
         this.messagesWrap.appendChild(messageItem);
-
+        this.sortMessages();
         return messageItem;
+    }
+    
+    sortMessages(date) {
+
     }
 }
