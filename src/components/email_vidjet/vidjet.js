@@ -10,30 +10,33 @@ export default class EmailVidjet {
         this.errBlock = this.appContainer.querySelector('.err-block');
         this.incomingSum = 0;
         this.popup = new Popup('.popup-wrap');
-        this.timeInteral = interval(5000);
+        this.timeInteral = interval(1000);
         this.dataUrl = 'http://localhost:7070/messages/unread';
+        this.messageSorting = [];
 
         this.timeInteral.subscribe({
             next: () => {
                 this.dataStream$ = ajax.getJSON(this.dataUrl);
                 const messages = document.querySelectorAll('.messages-item');
-                messages.forEach((item) => item.remove());
                 this.dataStream$.subscribe((data) => {
                     if (data.status === 'ok') {
                         this.errBlock.style.display = 'none';
                         this.incomingSum = data.messages.length;
-                        this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
+                        data.messages.sort((a,b) => new Date(a.received) - new Date(b.received));
                         data.messages.forEach((message) => {
                            const time = new Date(message.received).toLocaleTimeString('ru')
                            const date = new Date(message.received).toLocaleDateString('ru');
                            const messageDate = `${time} ${date}`;
                            const messageFull = message.body;
+                           messages.forEach((item) => item.style.display = 'none')
+                           messages.forEach((item) => item.remove());
+                           this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
                            this.createMessage(message.subject, message.from, messageDate, messageFull);
                         })
                     }
                 }, (err) => {
                     this.errBlock.style.display = 'block';
-                    this.errBlock.textContent = 'reconnecting ...';
+                    this.errBlock.textContent = 'the server is unavailable ...';
                     this.incomingTitle.textContent = `Incoming (${this.incomingSum})`;
                 });
             }
@@ -84,11 +87,6 @@ export default class EmailVidjet {
         messageItem.appendChild(messageText);
         messageItem.appendChild(messageDate);
         this.messagesWrap.appendChild(messageItem);
-        this.sortMessages();
         return messageItem;
-    }
-    
-    sortMessages(date) {
-
     }
 }
