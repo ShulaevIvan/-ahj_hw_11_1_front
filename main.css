@@ -1,0 +1,117 @@
+body {
+    box-sizing: border-box;
+    overflow-x: hidden;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 1170px;
+    min-width: 1024px;
+    align-items: center;
+}
+.messages-wrap {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column-reverse;
+    flex-wrap: wrap;
+}
+.messages-item {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100;
+    border: 1px solid;
+    min-height: 50px;
+    align-items: center;
+    cursor: pointer;
+}
+.messages-item-email, .messages-item-text {
+    display: flex;
+    justify-content: center;
+    width: 33%;
+    pointer-events: none;
+}
+.messages-item-date {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 3%;
+    width: 30%;
+    pointer-events: none;
+}
+.messages-item-text {
+    pointer-events: none;
+}
+.incoming-title {
+    margin:10px 0px;
+}
+.err-block {
+    padding: 0;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+.popup-wrap {
+    justify-content: center;
+    z-index: 99;
+    width: 45%;
+    min-height: 200px;
+    border: 1px solid;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    background-color: white;
+}
+.popup-close::before {
+    position: absolute;
+    top: -5%;
+    right: 5%;
+    content: '\274C';
+    cursor: pointer;
+}
+.popup-close {
+    margin-bottom: 20px;
+}
+.popup-body {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 700px;
+    margin-top: 40px;
+}
+.popup-header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 40px 0 20px;
+}
+.popup-item-email, .popup-item-date {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+}
+.popup-item-text {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    min-height: 200px;
+    padding: 40px;
+    line-height: 1.2;
+}
+.popup-show {
+    display: flex;
+}
+.popup-hide {
+    display: none;
+}
